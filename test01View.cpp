@@ -31,6 +31,7 @@ BEGIN_MESSAGE_MAP(Ctest01View, CView)
     ON_WM_TIMER()
     ON_WM_LBUTTONDOWN()
     ON_WM_LBUTTONUP()
+    ON_WM_MOUSEMOVE()
 END_MESSAGE_MAP()
 
 // Ctest01View construction/destruction
@@ -39,6 +40,7 @@ Ctest01View::Ctest01View()
 {
 	// TODO: add construction code here
     board.createRandomScene();
+    boardView = board;
     touchPoint = NtPoint::invalid;
 }
 
@@ -63,10 +65,10 @@ void Ctest01View::OnDraw(CDC* pDC)
 	if (!pDoc)
 		return;
 
-    const NtTerisBoardData& data = board.getBoardData();
+    const NtTerisBoardData& data = boardView.getBoardData();
 
-    pDC->Draw3dRect(0, 0, data.getWidth() * GRID, 
-        data.getHeight() * GRID, 0x0000FF, 0x0000FF);
+    //pDC->Draw3dRect(0, 0, data.getWidth() * GRID, 
+    //    data.getHeight() * GRID, 0x000000, 0x000000);
 
     for(unsigned int r = 0; r < data.getHeight(); ++ r)
     {
@@ -76,7 +78,7 @@ void Ctest01View::OnDraw(CDC* pDC)
 
             if (isBlockTeris(dt))
             {
-                pDC->Draw3dRect(c*GRID, r*GRID, GRID, GRID, dt, dt);
+                pDC->Draw3dRect(c*GRID, r*GRID, GRID, GRID, 0, 0);
             }
         }
     }
@@ -163,8 +165,29 @@ void Ctest01View::OnLButtonUp( UINT nFlags, CPoint point )
     
     board.moveDirection(touchPoint, NtPoint(x-touchPoint.x, y-touchPoint.y));
     board.dispel();
+    boardView = board;
 
     touchPoint = NtPoint::invalid;
+
+    InvalidateRect(NULL);
+}
+
+void Ctest01View::OnMouseMove( UINT nFlags, CPoint point )
+{
+    if (touchPoint == NtPoint::invalid)
+    {
+        return;
+    }
+
+    int x = point.x / GRID;
+    int y = point.y / GRID;
+
+    NtPoint pt;
+    pt.x = x - touchPoint.x;
+    pt.y = y - touchPoint.y;
+
+    boardView = board;
+    boardView.moveDirection(touchPoint, pt);
 
     InvalidateRect(NULL);
 }

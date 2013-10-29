@@ -18,6 +18,12 @@ struct NtPoint
         y-= p.y;
     }
 
+    void mul(const NtPoint& p)
+    {
+        x*= p.x;
+        y*= p.y;
+    }
+
     bool operator == ( const NtPoint& p) const
     {
         return x == p.x && y == p.y;

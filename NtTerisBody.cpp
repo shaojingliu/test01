@@ -47,9 +47,10 @@ bool NtTerisBody::isOutside(const NtPoint& sz) const
 {
     for(unsigned int i =0 ; i<bodyData.length(); ++i)
     {
-        NtPoint p = bodyData.at(i);
+        const NtPoint& pt = bodyData.at(i);
+        NtPoint p(pt);
         p.plus(position);
-        if (p.x < 0 || p.y < 0 || p.x >= sz.x || p.y >= sz.y)
+        if (p.x < 0 || p.y < 0 || p.x > sz.x || p.y > sz.y)
         {
             return true;
         }

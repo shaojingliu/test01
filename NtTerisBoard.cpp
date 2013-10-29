@@ -72,38 +72,22 @@ boardDataType NtTerisBoard::at( const NtPoint& position )
     return boardData.at(position);
 }
 
-inline void amendBoardPosition(NtPoint& p)
-{
-    if ( p.x < 0 )
-    {
-        p.x = 0;
-    } 
-    else if (p.x >=BOARD_WIDTH)
-    {
-        p.x = BOARD_WIDTH-1;
-    }
-
-    if (p.y < 0 )
-    {
-        p.y = 0;
-    }
-    else if (p.y >= BOARD_HEIGHT)
-    {
-        p.y = BOARD_HEIGHT-1;
-    }
-}
-
-inline NtPoint normalStep(const NtPoint& direction)
+inline NtPoint getSingleStep(const NtPoint& direction)
 {
     if (direction.x == 0 && direction.y == 0)
     {
         return NtPoint::invalid;
     }
 
-    NtPoint pt;
-    direction.x != 0 ? pt.x = direction.x / (abs(direction.x)) : 0;
-    direction.y != 0 ? pt.y = direction.y / (abs(direction.y)) : 0;
-    return pt;
+    int x = abs(direction.x);
+    int y = abs(direction.y);
+
+    if (x>y)
+    {
+        return NtPoint(direction.x / x, 0);
+    }
+
+    return NtPoint(0, direction.y / y);
 }
 
 NtPoint NtTerisBoard::moveDirection( const NtPoint& position, const NtPoint& direction )
@@ -118,11 +102,19 @@ NtPoint NtTerisBoard::moveDirection( const NtPoint& position, const NtPoint& dir
     NtTerisBody body = copyBoard.tackOut(srcDt);
     copyBoard.erase(srcDt);
 
-    NtPoint advStep = normalStep(direction);
+    NtPoint advStep = getSingleStep(direction);
     if (advStep == NtPoint::invalid)
     {
         return advStep;
     }
+
+    NtPoint target = advStep;
+    target.x *= abs(direction.x);
+    target.y *= abs(direction.y);
+
+    wchar_t buff[256];
+    wsprintf(buff, L"move dir: pos.x=%d, pos.y=%d\n", direction.x, direction.y);
+    OutputDebugString(buff);
 
     NtPoint currStep;
     while(1)
@@ -131,12 +123,15 @@ NtPoint NtTerisBoard::moveDirection( const NtPoint& position, const NtPoint& dir
 
         if (body.isOutside(NtPoint(BOARD_WIDTH, BOARD_HEIGHT)))
         {
+            wchar_t buff[256];
+            wsprintf(buff, L"pos.x=%d, pos.y=%d\n", currStep.x, currStep.y);
+            OutputDebugString(buff);
             break;
         }
 
         if (copyBoard.test(body))
         {
-            if (currStep == direction)
+            if (currStep == target)
             {
                 boardData.erase(srcDt);
                 boardData.place(body);
