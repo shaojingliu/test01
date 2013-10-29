@@ -13,7 +13,7 @@ bool NtTerisBoardData::place( const NtTerisBody& body )
     {
         NtPoint ps = bodyData.at(i);
         ps.plus(position);
-        placeEx(ps, dt);
+        placeData(ps, dt);
     }
 
     return true;
@@ -28,7 +28,8 @@ bool NtTerisBoardData::test( const NtTerisBody& body )
     {
         NtPoint ps = bodyData.at(i);
         ps.plus(position);
-        if (at(ps) != BOARD_EMPTY)
+        boardDataType dt = at(ps);
+        if (dt != BOARD_EMPTY)
         {
             return false;
         }
@@ -42,7 +43,7 @@ boardDataType NtTerisBoardData::at( const NtPoint& p ) const
     return (p.x < BOARD_WIDTH && p.y < BOARD_HEIGHT) ? data[p.y][p.x] : BOARD_INVALID;
 }
 
-void NtTerisBoardData::placeEx( const NtPoint& p, boardDataType dt )
+void NtTerisBoardData::placeData( const NtPoint& p, boardDataType dt )
 {
     (p.x < BOARD_WIDTH && p.y < BOARD_HEIGHT) ? data[p.y][p.x] = dt : 0;
 }
@@ -57,3 +58,41 @@ NtTerisBoardData::NtTerisBoardData()
 {
     memset(data, 0, sizeof(data));
 }
+
+void NtTerisBoardData::erase( boardDataType dt )
+{
+    for(unsigned int r = 0; r<BOARD_HEIGHT; ++r)
+    {
+        for(unsigned int c =0; c<BOARD_WIDTH; ++c)
+        {
+            if (data[r][c] == dt)
+            {
+                data[r][c] = BOARD_EMPTY;
+            }
+        }
+    }
+}
+
+NtTerisBody NtTerisBoardData::tackOut( boardDataType dt )
+{
+    NtTerisBody body;
+
+    // step 1. find all and tack out
+    if (!isBlockTeris(dt))
+    {
+        return body;
+    }
+
+    for( unsigned int r = 0; r< BOARD_HEIGHT; ++r)
+    {
+        for(unsigned int c =0; c< BOARD_WIDTH; ++c)
+        {
+            if(data[r][c]==dt)
+            {
+                body.addData(NtPoint(c, r));
+            }
+        }
+    }
+    return body;
+}
+

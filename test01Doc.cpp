@@ -30,7 +30,6 @@ END_MESSAGE_MAP()
 Ctest01Doc::Ctest01Doc()
 {
 	// TODO: add one-time construction code here
-
 }
 
 Ctest01Doc::~Ctest01Doc()

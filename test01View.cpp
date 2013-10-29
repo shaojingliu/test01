@@ -16,6 +16,7 @@
 #define new DEBUG_NEW
 #endif
 
+unsigned int GRID = 8;
 
 // Ctest01View
 
@@ -27,6 +28,9 @@ BEGIN_MESSAGE_MAP(Ctest01View, CView)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CView::OnFilePrintPreview)
     ON_WM_KEYDOWN()
+    ON_WM_TIMER()
+    ON_WM_LBUTTONDOWN()
+    ON_WM_LBUTTONUP()
 END_MESSAGE_MAP()
 
 // Ctest01View construction/destruction
@@ -35,6 +39,7 @@ Ctest01View::Ctest01View()
 {
 	// TODO: add construction code here
     board.createRandomScene();
+    touchPoint = NtPoint::invalid;
 }
 
 Ctest01View::~Ctest01View()
@@ -60,8 +65,6 @@ void Ctest01View::OnDraw(CDC* pDC)
 
     const NtTerisBoardData& data = board.getBoardData();
 
-    unsigned int GRID = 5;
-
     pDC->Draw3dRect(0, 0, data.getWidth() * GRID, 
         data.getHeight() * GRID, 0x0000FF, 0x0000FF);
 
@@ -77,7 +80,7 @@ void Ctest01View::OnDraw(CDC* pDC)
             }
         }
     }
-	// TODO: add draw code for native data here
+
 }
 
 
@@ -127,4 +130,42 @@ void Ctest01View::OnKeyDown( UINT nChar, UINT nRepCnt, UINT nFlags )
 
     InvalidateRect(NULL);
 }
+
+void Ctest01View::OnTimer( UINT_PTR nIDEvent )
+{
+}
+
+void Ctest01View::OnLButtonDown( UINT nFlags, CPoint point )
+{
+    int x = point.x / GRID;
+    int y = point.y / GRID;
+
+    if (isBlockTeris( board.touchAt( NtPoint(x, y)) ))
+    {
+        touchPoint.x = x;
+        touchPoint.y = y;
+    }
+    else
+    {
+        touchPoint = NtPoint::invalid;
+    }
+}
+
+void Ctest01View::OnLButtonUp( UINT nFlags, CPoint point )
+{
+    if (touchPoint == NtPoint::invalid)
+    {
+        return;
+    }
+
+    int x = point.x / GRID;
+    int y = point.y / GRID;
+    
+    board.moveDirection(touchPoint, NtPoint(x-touchPoint.x, y-touchPoint.y));
+
+    touchPoint = NtPoint::invalid;
+
+    InvalidateRect(NULL);
+}
+
 // Ctest01View message handlers

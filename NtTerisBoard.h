@@ -13,8 +13,10 @@ public:
     bool pushDown(const NtTerisBody& body);
     const NtTerisBoardData& getBoardData() const { return boardData; }
     void insertNewBody();
+    
+    boardDataType touchAt(const NtPoint& position);
+    NtPoint moveDirection(const NtPoint& position, const NtPoint& direction);
 
 protected:
     NtTerisBoardData boardData;
-    std::vector<NtTerisBody> bodys;
 };

@@ -25,7 +25,7 @@ NtTerisBoard::~NtTerisBoard(void)
 
 void NtTerisBoard::createRandomScene()
 {
-    for(unsigned int i=0; i<3; ++i)
+    for(unsigned int i=0; i<44; ++i)
     {
         insertNewBody();
     }
@@ -67,6 +67,11 @@ void NtTerisBoard::insertNewBody()
     pushDown(body);
 }
 
+boardDataType NtTerisBoard::touchAt( const NtPoint& position )
+{
+    return boardData.at(position);
+}
+
 inline void amendBoardPosition(NtPoint& p)
 {
     if ( p.x < 0 )
@@ -87,3 +92,50 @@ inline void amendBoardPosition(NtPoint& p)
         p.y = BOARD_HEIGHT-1;
     }
 }
+
+NtPoint NtTerisBoard::moveDirection( const NtPoint& position, const NtPoint& direction )
+{
+    boardDataType srcDt = boardData.at(position);
+    if (!isBlockTeris(srcDt))
+    {
+        return NtPoint::invalid;
+    }
+
+    NtTerisBoardData copyData = boardData;
+    NtTerisBody body = copyData.tackOut(srcDt);
+    copyData.erase(srcDt);
+
+    NtPoint advStep;
+    direction.x != 0 ? advStep.x = direction.x / (abs(direction.x)) : 0;
+    direction.y != 0 ? advStep.y = direction.y / (abs(direction.y)) : 0;
+    if (direction.x == 0 && direction.y == 0)
+    {
+        return NtPoint::invalid;
+    }
+
+    NtPoint currStep;
+    while(1)
+    {
+        body.setPosition(currStep);
+        if (copyData.test(body))
+        {
+            if (currStep == direction)
+            {
+                boardData.erase(srcDt);
+                boardData.place(body);
+                break;
+            }
+            else
+            {
+                currStep.plus(advStep);
+            }
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    return currStep;
+}
+

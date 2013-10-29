@@ -14,6 +14,7 @@ public:
     void setPosition(const NtPoint& pos) { position = pos; }
     void movePosition(const NtPoint& pos) { position.plus(pos); }
     NtPoint getSize() const ;
+    void addData(const NtPoint& pos)  { bodyData.add(pos.x, pos.y); }
 protected:
     NtTerisBodyData bodyData;
     NtPoint position;

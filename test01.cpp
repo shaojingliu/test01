@@ -123,6 +123,9 @@ BOOL Ctest01App::InitInstance()
 	// The one and only window has been initialized, so show and update it
 	m_pMainWnd->ShowWindow(SW_SHOW);
 	m_pMainWnd->UpdateWindow();
+
+    SetTimer(m_pMainWnd->GetActiveWindow()->GetSafeHwnd(), 1001, 33, NULL);
+
 	return TRUE;
 }
 
