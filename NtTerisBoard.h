@@ -13,9 +13,9 @@ public:
     bool pushDown(const NtTerisBody& body);
     const NtTerisBoardData& getBoardData() const { return boardData; }
     void insertNewBody();
-    
-    boardDataType touchAt(const NtPoint& position);
+    boardDataType at(const NtPoint& position);
     NtPoint moveDirection(const NtPoint& position, const NtPoint& direction);
+    unsigned int dispel();
 
 protected:
     NtTerisBoardData boardData;

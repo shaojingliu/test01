@@ -96,3 +96,39 @@ NtTerisBody NtTerisBoardData::tackOut( boardDataType dt )
     return body;
 }
 
+void NtTerisBoardData::dispelAll()
+{
+    for( unsigned int r = 0; r< BOARD_HEIGHT; ++r)
+    {
+        if (canDispel(r))
+        {
+            eraseAndRelocate(r);
+        }
+    }
+}
+
+bool NtTerisBoardData::canDispel( int r )
+{
+    for(unsigned int i=0; i<BOARD_WIDTH; ++i)
+    {
+        if (!isBlockTeris(data[r][i]))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+void NtTerisBoardData::eraseAndRelocate( int row )
+{
+    for(unsigned int r=row; r>0; --r)
+    {
+        memcpy(&data[r][0], &data[r-1][0], sizeof(data[r]));
+    }
+
+    for(unsigned int c = 0; c < BOARD_WIDTH; ++c)
+    {
+        data[0][c] = BOARD_EMPTY;
+    }
+}
+

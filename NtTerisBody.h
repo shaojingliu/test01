@@ -15,6 +15,7 @@ public:
     void movePosition(const NtPoint& pos) { position.plus(pos); }
     NtPoint getSize() const ;
     void addData(const NtPoint& pos)  { bodyData.add(pos.x, pos.y); }
+    bool isOutside(const NtPoint& sz) const;
 protected:
     NtTerisBodyData bodyData;
     NtPoint position;

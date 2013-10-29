@@ -25,7 +25,7 @@ NtTerisBoard::~NtTerisBoard(void)
 
 void NtTerisBoard::createRandomScene()
 {
-    for(unsigned int i=0; i<44; ++i)
+    for(unsigned int i=0; i<2; ++i)
     {
         insertNewBody();
     }
@@ -67,7 +67,7 @@ void NtTerisBoard::insertNewBody()
     pushDown(body);
 }
 
-boardDataType NtTerisBoard::touchAt( const NtPoint& position )
+boardDataType NtTerisBoard::at( const NtPoint& position )
 {
     return boardData.at(position);
 }
@@ -93,6 +93,19 @@ inline void amendBoardPosition(NtPoint& p)
     }
 }
 
+inline NtPoint normalStep(const NtPoint& direction)
+{
+    if (direction.x == 0 && direction.y == 0)
+    {
+        return NtPoint::invalid;
+    }
+
+    NtPoint pt;
+    direction.x != 0 ? pt.x = direction.x / (abs(direction.x)) : 0;
+    direction.y != 0 ? pt.y = direction.y / (abs(direction.y)) : 0;
+    return pt;
+}
+
 NtPoint NtTerisBoard::moveDirection( const NtPoint& position, const NtPoint& direction )
 {
     boardDataType srcDt = boardData.at(position);
@@ -101,23 +114,27 @@ NtPoint NtTerisBoard::moveDirection( const NtPoint& position, const NtPoint& dir
         return NtPoint::invalid;
     }
 
-    NtTerisBoardData copyData = boardData;
-    NtTerisBody body = copyData.tackOut(srcDt);
-    copyData.erase(srcDt);
+    NtTerisBoardData copyBoard = boardData;
+    NtTerisBody body = copyBoard.tackOut(srcDt);
+    copyBoard.erase(srcDt);
 
-    NtPoint advStep;
-    direction.x != 0 ? advStep.x = direction.x / (abs(direction.x)) : 0;
-    direction.y != 0 ? advStep.y = direction.y / (abs(direction.y)) : 0;
-    if (direction.x == 0 && direction.y == 0)
+    NtPoint advStep = normalStep(direction);
+    if (advStep == NtPoint::invalid)
     {
-        return NtPoint::invalid;
+        return advStep;
     }
 
     NtPoint currStep;
     while(1)
     {
         body.setPosition(currStep);
-        if (copyData.test(body))
+
+        if (body.isOutside(NtPoint(BOARD_WIDTH, BOARD_HEIGHT)))
+        {
+            break;
+        }
+
+        if (copyBoard.test(body))
         {
             if (currStep == direction)
             {
@@ -125,10 +142,8 @@ NtPoint NtTerisBoard::moveDirection( const NtPoint& position, const NtPoint& dir
                 boardData.place(body);
                 break;
             }
-            else
-            {
-                currStep.plus(advStep);
-            }
+
+            currStep.plus(advStep);
         }
         else
         {
@@ -137,5 +152,11 @@ NtPoint NtTerisBoard::moveDirection( const NtPoint& position, const NtPoint& dir
     }
 
     return currStep;
+}
+
+unsigned int NtTerisBoard::dispel()
+{
+    boardData.dispelAll();
+    return 0;
 }
 

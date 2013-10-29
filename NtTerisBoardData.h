@@ -14,6 +14,10 @@ public:
     void placeData(const NtPoint& p, boardDataType dt);
     void erase(boardDataType dt);
     NtTerisBody tackOut(boardDataType dt);
+    void dispelAll();
 protected:
+    void eraseAndRelocate(int r);
+    bool canDispel(int r);
+
     boardDataType data[BOARD_HEIGHT][BOARD_WIDTH];
 };

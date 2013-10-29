@@ -16,7 +16,7 @@
 #define new DEBUG_NEW
 #endif
 
-unsigned int GRID = 8;
+unsigned int GRID = 20;
 
 // Ctest01View
 
@@ -140,7 +140,7 @@ void Ctest01View::OnLButtonDown( UINT nFlags, CPoint point )
     int x = point.x / GRID;
     int y = point.y / GRID;
 
-    if (isBlockTeris( board.touchAt( NtPoint(x, y)) ))
+    if (isBlockTeris( board.at( NtPoint(x, y)) ))
     {
         touchPoint.x = x;
         touchPoint.y = y;
@@ -162,6 +162,7 @@ void Ctest01View::OnLButtonUp( UINT nFlags, CPoint point )
     int y = point.y / GRID;
     
     board.moveDirection(touchPoint, NtPoint(x-touchPoint.x, y-touchPoint.y));
+    board.dispel();
 
     touchPoint = NtPoint::invalid;
 
