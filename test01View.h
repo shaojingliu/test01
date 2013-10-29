@@ -3,6 +3,7 @@
 //
 
 #pragma once
+#include "NtTerisBoard.h"
 
 
 class Ctest01View : public CView
@@ -26,6 +27,7 @@ protected:
 	virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);
 	virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
 	virtual void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo);
+    afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 
 // Implementation
 public:
@@ -36,7 +38,7 @@ public:
 #endif
 
 protected:
-
+    NtTerisBoard board;
 // Generated message map functions
 protected:
 	DECLARE_MESSAGE_MAP()

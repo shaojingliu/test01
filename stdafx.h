@@ -51,4 +51,6 @@
 #endif
 #endif
 
+#include "NtConfig.h"
+#include "NtPoint.h"
 

@@ -26,6 +26,7 @@ BEGIN_MESSAGE_MAP(Ctest01View, CView)
 	ON_COMMAND(ID_FILE_PRINT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CView::OnFilePrintPreview)
+    ON_WM_KEYDOWN()
 END_MESSAGE_MAP()
 
 // Ctest01View construction/destruction
@@ -33,7 +34,7 @@ END_MESSAGE_MAP()
 Ctest01View::Ctest01View()
 {
 	// TODO: add construction code here
-
+    board.createRandomScene();
 }
 
 Ctest01View::~Ctest01View()
@@ -50,13 +51,32 @@ BOOL Ctest01View::PreCreateWindow(CREATESTRUCT& cs)
 
 // Ctest01View drawing
 
-void Ctest01View::OnDraw(CDC* /*pDC*/)
+void Ctest01View::OnDraw(CDC* pDC)
 {
 	Ctest01Doc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 	if (!pDoc)
 		return;
 
+    const NtTerisBoardData& data = board.getBoardData();
+
+    unsigned int GRID = 5;
+
+    pDC->Draw3dRect(0, 0, data.getWidth() * GRID, 
+        data.getHeight() * GRID, 0x00FF00, 0x00FF00);
+
+    for(unsigned int r = 0; r < data.getHeight(); ++ r)
+    {
+        for(unsigned int c = 0; c < data.getWidth(); ++c)
+        {
+            boardDataType dt = data.at(NtPoint(c, r));
+
+            if (isBlockTeris(dt))
+            {
+                pDC->Draw3dRect(c*GRID, r*GRID, GRID, GRID, dt, dt);
+            }
+        }
+    }
 	// TODO: add draw code for native data here
 }
 
@@ -101,4 +121,10 @@ Ctest01Doc* Ctest01View::GetDocument() const // non-debug version is inline
 #endif //_DEBUG
 
 
+void Ctest01View::OnKeyDown( UINT nChar, UINT nRepCnt, UINT nFlags )
+{
+    board.insertNewBody();
+
+    InvalidateRect(NULL);
+}
 // Ctest01View message handlers
