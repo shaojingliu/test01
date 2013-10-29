@@ -4,9 +4,9 @@
 unsigned char sharp1[64] = 
 {
     1, 0, 0, 0, 0, 0, 0, 0,
-    0, 1, 0, 0, 0, 0, 0, 0,
-    0, 0, 1, 0, 0, 0, 0, 0,
-    0, 0, 0, 1, 0, 0, 0, 0,
+    1, 0, 0, 0, 0, 0, 0, 0,
+    1, 0, 0, 0, 0, 0, 0, 0,
+    1, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
@@ -51,9 +51,9 @@ unsigned char sharp4[64] =
 
 unsigned char sharp5[64] = 
 {
-    1, 0, 0, 0, 0, 0, 0, 0,
     1, 1, 0, 0, 0, 0, 0, 0,
-    0, 1, 0, 0, 0, 0, 0, 0,
+    1, 1, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
@@ -61,6 +61,17 @@ unsigned char sharp5[64] =
     0, 0, 0, 0, 0, 0, 0, 0,
 };
 
+unsigned char sharp6[64] = 
+{
+    0, 1, 0, 0, 0, 0, 0, 0,
+    1, 1, 1, 0, 0, 0, 0, 0,
+    0, 1, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0,
+};
 
 NtTerisBodyFactory& NtTerisBodyFactory::Get()
 {
@@ -77,7 +88,6 @@ const NtTerisBody& NtTerisBodyFactory::CreateRandomBase()
 NtTerisBodyFactory::NtTerisBodyFactory()
 {
     {
-
         NtTerisBody body;
         body.initData(sharp1);
         baseBody.push_back(body);
@@ -104,6 +114,11 @@ NtTerisBodyFactory::NtTerisBodyFactory()
     {
         NtTerisBody body;
         body.initData(sharp5);
+        baseBody.push_back(body);
+    }
+    {
+        NtTerisBody body;
+        body.initData(sharp6);
         baseBody.push_back(body);
     }
 }

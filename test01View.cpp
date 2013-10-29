@@ -63,7 +63,7 @@ void Ctest01View::OnDraw(CDC* pDC)
     unsigned int GRID = 5;
 
     pDC->Draw3dRect(0, 0, data.getWidth() * GRID, 
-        data.getHeight() * GRID, 0x00FF00, 0x00FF00);
+        data.getHeight() * GRID, 0x0000FF, 0x0000FF);
 
     for(unsigned int r = 0; r < data.getHeight(); ++ r)
     {
