@@ -102,43 +102,36 @@ NtPoint NtTerisBoard::moveDirection( const NtPoint& position, const NtPoint& dir
     NtTerisBody body = copyBoard.tackOut(srcDt);
     copyBoard.erase(srcDt);
 
-    NtPoint advStep = getSingleStep(direction);
-    if (advStep == NtPoint::invalid)
+    NtPoint singleStep = getSingleStep(direction);
+    if (singleStep == NtPoint::invalid)
     {
-        return advStep;
+        return singleStep;
     }
 
-    NtPoint target = advStep;
-    target.x *= abs(direction.x);
-    target.y *= abs(direction.y);
+    NtPoint targetStep = singleStep;
+    targetStep.x *= abs(direction.x);
+    targetStep.y *= abs(direction.y);
 
-    wchar_t buff[256];
-    wsprintf(buff, L"move dir: pos.x=%d, pos.y=%d\n", direction.x, direction.y);
-    OutputDebugString(buff);
-
-    NtPoint currStep;
+    NtPoint step;
     while(1)
     {
-        body.setPosition(currStep);
+        body.setPosition(step);
 
         if (body.isOutside(NtPoint(BOARD_WIDTH, BOARD_HEIGHT)))
         {
-            wchar_t buff[256];
-            wsprintf(buff, L"pos.x=%d, pos.y=%d\n", currStep.x, currStep.y);
-            OutputDebugString(buff);
             break;
         }
 
         if (copyBoard.test(body))
         {
-            if (currStep == target)
+            if (step == targetStep)
             {
                 boardData.erase(srcDt);
                 boardData.place(body);
                 break;
             }
 
-            currStep.plus(advStep);
+            step.plus(singleStep);
         }
         else
         {
@@ -146,7 +139,7 @@ NtPoint NtTerisBoard::moveDirection( const NtPoint& position, const NtPoint& dir
         }
     }
 
-    return currStep;
+    return step;
 }
 
 unsigned int NtTerisBoard::dispel()
