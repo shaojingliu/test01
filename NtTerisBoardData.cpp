@@ -1,13 +1,15 @@
 #include "stdafx.h"
 #include "NtTerisBoardData.h"
 
+boardDataType sdt = 0x00FF0000;
+
 bool NtTerisBoardData::place( const NtTerisBody& body )
 {
     const NtPoint& position = body.getPosition();
     const NtTerisBodyData& bodyData= body.getBodyData();
     unsigned int len = bodyData.length();
 
-    boardDataType dt = rand() % (0x7FFFFFFF-10) + 1;
+    boardDataType dt = ++sdt;
 
     for(unsigned int i = 0; i<len; ++i)
     {

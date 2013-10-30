@@ -163,3 +163,13 @@ unsigned int NtTerisBoard::dispel()
     return 0;
 }
 
+void NtTerisBoard::updateGravity()
+{
+	for(int r = BOARD_HEIGHT-1; r >=0; --r)
+	{
+		for(unsigned int c = 0; c < BOARD_WIDTH; ++c)
+		{
+			moveDirection( NtPoint(c, r), NtPoint(0, BOARD_HEIGHT));
+		}
+	}
+}

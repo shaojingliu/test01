@@ -15,6 +15,7 @@ public:
     void insertNewBody();
     boardDataType at(const NtPoint& position);
     NtPoint moveDirection(const NtPoint& position, const NtPoint& direction);
+	void updateGravity();
     unsigned int dispel();
 
 protected:

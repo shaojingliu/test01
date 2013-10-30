@@ -170,6 +170,7 @@ void Ctest01View::OnLButtonUp( UINT nFlags, CPoint point )
     
     board.moveDirection(touchPoint, NtPoint(x-touchPoint.x, y-touchPoint.y));
     board.dispel();
+	board.updateGravity();
     boardView = board;
 
     touchPoint = NtPoint::invalid;
