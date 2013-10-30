@@ -1,3 +1,4 @@
 path "C:\Program Files (x86)\Git\bin";%PATH%;
-git commint
+path "C:\Program Files\Git\bin"; %PATH%;
+git commit -a 
 git push
