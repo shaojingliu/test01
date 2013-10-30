@@ -67,8 +67,8 @@ void Ctest01View::OnDraw(CDC* pDC)
 
     const NtTerisBoardData& data = boardView.getBoardData();
 
-    //pDC->Draw3dRect(0, 0, data.getWidth() * GRID, 
-    //    data.getHeight() * GRID, 0x000000, 0x000000);
+    pDC->Draw3dRect(0, 0, data.getWidth() * GRID, 
+        data.getHeight() * GRID, 0x000000, 0x000000);
 
     for(unsigned int r = 0; r < data.getHeight(); ++ r)
     {
@@ -151,6 +151,11 @@ void Ctest01View::OnLButtonDown( UINT nFlags, CPoint point )
     {
         touchPoint = NtPoint::invalid;
     }
+
+	boardView = board;
+
+	InvalidateRect(NULL);
+
 }
 
 void Ctest01View::OnLButtonUp( UINT nFlags, CPoint point )

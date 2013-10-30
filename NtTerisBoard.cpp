@@ -113,6 +113,8 @@ NtPoint NtTerisBoard::moveDirection( const NtPoint& position, const NtPoint& dir
     targetStep.y *= abs(direction.y);
 
     NtPoint step;
+	NtPoint lastStep;
+
     while(1)
     {
         body.setPosition(step);
@@ -126,11 +128,13 @@ NtPoint NtTerisBoard::moveDirection( const NtPoint& position, const NtPoint& dir
         {
             if (step == targetStep)
             {
+				// succ.
                 boardData.erase(srcDt);
                 boardData.place(body);
-                break;
+                return step;
             }
 
+			lastStep = step;
             step.plus(singleStep);
         }
         else
@@ -139,7 +143,18 @@ NtPoint NtTerisBoard::moveDirection( const NtPoint& position, const NtPoint& dir
         }
     }
 
-    return step;
+	body.setPosition(lastStep);
+	if (!body.isOutside(NtPoint(BOARD_WIDTH, BOARD_HEIGHT)))
+	{
+		if (copyBoard.test(body))
+		{
+			boardData.erase(srcDt);
+			boardData.place(body);
+			return lastStep;
+		}
+	}
+    
+	return NtPoint();
 }
 
 unsigned int NtTerisBoard::dispel()
