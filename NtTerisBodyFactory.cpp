@@ -81,9 +81,8 @@ NtTerisBodyFactory& NtTerisBodyFactory::Get()
 
 const NtTerisBody& NtTerisBodyFactory::CreateRandomBase()
 {
-    //unsigned int index = rand() % ( baseBody.size() );
-    //return baseBody[index];
-    return baseBody[4];
+    unsigned int index = rand() % ( baseBody.size() );
+    return baseBody[index];
 }
 
 NtTerisBodyFactory::NtTerisBodyFactory()

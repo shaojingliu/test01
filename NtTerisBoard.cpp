@@ -25,7 +25,7 @@ NtTerisBoard::~NtTerisBoard(void)
 
 void NtTerisBoard::createRandomScene()
 {
-    for(unsigned int i=0; i<2; ++i)
+    for(unsigned int i=0; i<10; ++i)
     {
         insertNewBody();
     }
